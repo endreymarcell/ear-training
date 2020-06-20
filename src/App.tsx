@@ -41,8 +41,6 @@ export const App: React.FC<{}> = () => {
   const [question, setQuestion] = useState<Question>(null)
   const [points, setPoints] = useState<number>(0)
 
-  const feedback = mode === AppMode.ANSWER_CORRECT ? '✅' : mode === AppMode.ANSWER_INCORRECT ? '❌' : null
-
   const poseQuestion = () => {
     setMode(AppMode.QUESTION)
     questionIndex.current++
