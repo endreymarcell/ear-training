@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import './App.css'
 import { getPair, notes, playSound } from './sounds'
 
@@ -10,7 +10,7 @@ enum AppMode {
   ROUND_END,
 }
 
-const numQuestionsInRound = 1
+const numQuestionsInRound = 12
 
 type Question = [number, number] | null
 
@@ -37,17 +37,16 @@ function isAnswerCorrect(question: Exclude<Question, null>, answer: Answer): boo
 
 export const App: React.FC<{}> = () => {
   const [mode, setMode] = useState<AppMode>(AppMode.ROUND_START)
-  const [questionIndex, setQuestionIndex] = useState<number>(0)
+  const questionIndex = useRef<number>(0)
   const [question, setQuestion] = useState<Question>(null)
   const [points, setPoints] = useState<number>(0)
 
   const feedback = mode === AppMode.ANSWER_CORRECT ? '✅' : mode === AppMode.ANSWER_INCORRECT ? '❌' : null
 
   const poseQuestion = () => {
-    console.log('question index is', questionIndex)
     setMode(AppMode.QUESTION)
-    setQuestionIndex(questionIndex + 1)
-    const question = getPair()
+    questionIndex.current++
+    const question = getPair(true)
     setQuestion(question)
     playQuestion(question)
   }
@@ -66,7 +65,7 @@ export const App: React.FC<{}> = () => {
   }
 
   const startRound = () => {
-    setQuestionIndex(0)
+    questionIndex.current = 0
   }
 
   const finalizeRound = () => {
@@ -76,7 +75,7 @@ export const App: React.FC<{}> = () => {
   const isRoundRunning = ![AppMode.ROUND_START, AppMode.ROUND_END].includes(mode)
   const canAnswer = mode === AppMode.QUESTION
   const hasAnswered = [AppMode.ANSWER_CORRECT, AppMode.ANSWER_INCORRECT].includes(mode)
-  const shouldShowFinalizeButton = hasAnswered && questionIndex === numQuestionsInRound
+  const shouldShowFinalizeButton = hasAnswered && questionIndex.current === numQuestionsInRound
 
   return (
     <div className="app">
@@ -142,7 +141,7 @@ export const App: React.FC<{}> = () => {
 
       {isRoundRunning && (
         <div className="bottom-row">
-          {questionIndex} / {numQuestionsInRound}
+          {questionIndex.current} / {numQuestionsInRound}
         </div>
       )}
     </div>
