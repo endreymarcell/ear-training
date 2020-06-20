@@ -10,7 +10,7 @@ enum AppMode {
   ROUND_END,
 }
 
-const numQuestionsInRound = 2
+const numQuestionsInRound = 1
 
 type Question = [number, number] | null
 
@@ -41,16 +41,10 @@ export const App: React.FC<{}> = () => {
   const [question, setQuestion] = useState<Question>(null)
   const [points, setPoints] = useState<number>(0)
 
-  const feedback =
-    mode === AppMode.ANSWER_CORRECT
-      ? 'correct!'
-      : mode === AppMode.ANSWER_INCORRECT
-      ? 'incorrect'
-      : mode === AppMode.ROUND_END
-      ? `${points} / 12 helyes válasz`
-      : null
+  const feedback = mode === AppMode.ANSWER_CORRECT ? '✅' : mode === AppMode.ANSWER_INCORRECT ? '❌' : null
 
   const poseQuestion = () => {
+    console.log('question index is', questionIndex)
     setMode(AppMode.QUESTION)
     setQuestionIndex(questionIndex + 1)
     const question = getPair()
@@ -71,6 +65,10 @@ export const App: React.FC<{}> = () => {
     }
   }
 
+  const startRound = () => {
+    setQuestionIndex(0)
+  }
+
   const finalizeRound = () => {
     setMode(AppMode.ROUND_END)
   }
@@ -81,36 +79,72 @@ export const App: React.FC<{}> = () => {
   const shouldShowFinalizeButton = hasAnswered && questionIndex === numQuestionsInRound
 
   return (
-    <div className="App">
-      {mode === AppMode.ROUND_START && <button onClick={() => poseQuestion()}>Start game</button>}
-      {isRoundRunning && (
+    <div className="app">
+      <div className="start-button-container">
+        {!isRoundRunning && (
+          <button
+            onClick={() => {
+              startRound()
+              poseQuestion()
+            }}
+          >
+            Új játék
+          </button>
+        )}
+      </div>
+
+      <div></div>
+      <div>
+        {isRoundRunning && (
+          <div className="answers">
+            <div className="question-repeat">
+              <button onClick={() => playQuestion(question)}>Ismételd</button>
+            </div>
+            <div className="answer-higher">
+              <button disabled={!canAnswer} className={canAnswer ? '' : 'disabled'} onClick={() => evaluateAnswer('+')}>
+                ⬆ Magasabb
+              </button>
+            </div>
+            <div className="answer-same">
+              <button disabled={!canAnswer} className={canAnswer ? '' : 'disabled'} onClick={() => evaluateAnswer('=')}>
+                = Ugyanaz
+              </button>
+            </div>
+            <div className="answer-lower">
+              <button disabled={!canAnswer} className={canAnswer ? '' : 'disabled'} onClick={() => evaluateAnswer('-')}>
+                ⬇ Mélyebb
+              </button>
+            </div>
+          </div>
+        )}
+        {mode === AppMode.ROUND_END && (
+          <div className="points-container">
+            Pontszámod:
+            <br />
+            {points} / {numQuestionsInRound}
+          </div>
+        )}
+      </div>
+      <div className="right-block">
+        <div className="answer-feedback">
+          {mode === AppMode.ANSWER_CORRECT && '✅'}
+          {mode === AppMode.ANSWER_INCORRECT && '❌'}
+        </div>
         <div>
+          {isRoundRunning && !shouldShowFinalizeButton && (
+            <button disabled={!hasAnswered} className={hasAnswered ? '' : 'disabled'} onClick={() => poseQuestion()}>
+              Következő
+            </button>
+          )}
+          {shouldShowFinalizeButton && <button onClick={() => finalizeRound()}>Vége</button>}
+        </div>
+      </div>
+
+      {isRoundRunning && (
+        <div className="bottom-row">
           {questionIndex} / {numQuestionsInRound}
         </div>
       )}
-      {isRoundRunning && (
-        <div>
-          <button onClick={() => playQuestion(question)}>Ismételd</button>
-          <button disabled={!canAnswer} onClick={() => evaluateAnswer('+')}>
-            Magasabb
-          </button>
-          <button disabled={!canAnswer} onClick={() => evaluateAnswer('=')}>
-            Ugyanaz
-          </button>
-          <button disabled={!canAnswer} onClick={() => evaluateAnswer('-')}>
-            Mélyebb
-          </button>
-        </div>
-      )}
-      <div>
-        {feedback}
-        {isRoundRunning && !shouldShowFinalizeButton && (
-          <button disabled={!hasAnswered} onClick={() => poseQuestion()}>
-            Következő
-          </button>
-        )}
-        {shouldShowFinalizeButton && <button onClick={() => finalizeRound()}>Vége</button>}
-      </div>
     </div>
   )
 }
