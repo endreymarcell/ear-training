@@ -1,3 +1,11 @@
+declare global {
+  interface Window {
+    sounds: { [name: string]: HTMLAudioElement }
+  }
+}
+
+window.sounds = {}
+
 export const notes = [
   'A2',
   'Bb2',
@@ -33,8 +41,24 @@ const FADEOUT_DELAY = 500
 const FADEOUT_INTERVAL = 10
 const FADEOUT_STEP_NUM = 10
 
+export function loadSounds(onLoaded: () => void) {
+  const loadingPromises = []
+  for (const note of notes) {
+    loadingPromises.push(
+      new Promise((resolve, reject) => {
+        const audio = new Audio(`/samples/${note}.ogg`)
+        audio.addEventListener('canplaythrough', () => {
+          resolve()
+        })
+        window.sounds[note] = audio
+      })
+    )
+  }
+  Promise.all(loadingPromises).then(() => onLoaded())
+}
+
 export function playSound(soundName: string, shouldFadeOut: boolean = true) {
-  const sound = document.getElementById('sound-' + soundName) as HTMLAudioElement
+  const sound = window.sounds[soundName]
   sound.volume = 1
   sound.currentTime = 0
   sound.play()
