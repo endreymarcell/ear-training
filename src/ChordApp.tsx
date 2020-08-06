@@ -35,6 +35,6 @@ export const ChordApp: React.FC = () => (
     <button onClick={() => playChord('C3')}>I (alap)</button>
     <button onClick={() => playChord('F3')}>IV (másodlagos alap)</button>
     <button onClick={() => playChord('G3')}>V (csúcs)</button>
-    <button onClick={() => playChord('A3', 'minor')}>iv (párhuzamos)</button>
+    <button onClick={() => playChord('A3', 'minor')}>vi (párhuzamos)</button>
   </div>
 )
