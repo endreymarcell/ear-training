@@ -1,0 +1,39 @@
+body {
+  background-color: #333;
+}
+.chord-app {
+  width: calc(100% - 400px);
+  display: flex;
+  justify-content: space-evenly;
+  padding: 200px;
+}
+
+button {
+  padding: 30px;
+  font-size: 30px;
+  border-radius: 20px;
+  outline: none;
+  color: white;
+  border-width: 5px;
+  border-color: white;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button:nth-child(1) {
+  background-color: #0059a0;
+}
+
+button:nth-child(2) {
+  background-color: #99c624;
+}
+
+button:nth-child(3) {
+  background-color: #dd380d;
+}
+
+button:nth-child(4) {
+  background-color: #ffae00;
+}

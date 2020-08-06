@@ -37,8 +37,8 @@ export const notes = [
   'C5',
 ]
 
-const FADEOUT_DELAY = 500
-const FADEOUT_INTERVAL = 10
+const FADEOUT_DELAY = 1000
+const FADEOUT_INTERVAL = 20
 const FADEOUT_STEP_NUM = 10
 
 export function loadSounds(onLoaded: () => void) {

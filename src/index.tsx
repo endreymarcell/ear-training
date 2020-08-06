@@ -1,14 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import StepApp from './StepApp'
 import * as serviceWorker from './serviceWorker'
 import { loadSounds, playSound } from './sounds'
+import { ChordApp } from './ChordApp'
 
 loadSounds(() => {
   ReactDOM.render(
     <React.StrictMode>
-      <StepApp />
+      <ChordApp />
     </React.StrictMode>,
     document.getElementById('root')
   )

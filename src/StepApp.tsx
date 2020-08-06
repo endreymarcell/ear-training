@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import './App.css'
+import './StepApp.css'
 import { getPair, notes, playSound } from './sounds'
 
 enum AppMode {
