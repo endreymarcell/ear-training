@@ -1,17 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App from './App'
+import StepApp from './StepApp'
 import * as serviceWorker from './serviceWorker'
-import { loadSounds } from './sounds'
+import { loadSounds, playSound } from './sounds'
 
 loadSounds(() => {
   ReactDOM.render(
     <React.StrictMode>
-      <App />
+      <StepApp />
     </React.StrictMode>,
     document.getElementById('root')
   )
 })
 
 serviceWorker.register()
+
+// @ts-ignore
+window.playSound = playSound

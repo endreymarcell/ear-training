@@ -35,7 +35,7 @@ function isAnswerCorrect(question: Exclude<Question, null>, answer: Answer): boo
   return isCorrect
 }
 
-export const App: React.FC<{}> = () => {
+export const StepApp: React.FC<{}> = () => {
   const [mode, setMode] = useState<AppMode>(AppMode.ROUND_START)
   const questionIndex = useRef<number>(0)
   const [question, setQuestion] = useState<Question>(null)
@@ -146,4 +146,4 @@ export const App: React.FC<{}> = () => {
   )
 }
 
-export default App
+export default StepApp
